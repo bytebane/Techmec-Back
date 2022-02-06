@@ -8,12 +8,13 @@ const { verifyAdmin } = require("../middleware/verifyToken");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/uploads/");
+    cb(null, "public/");
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
-    cb(null, `${req.body.name}.${ext}`);
+    // cb(null, `tmprod_${req.body.name.replace(/ +/g, "")}.${ext}`);
     // cb(null, `${req.body.name}_dt$${Date.now()}.${ext}`);
+    cb(null, `tmprod_${req.body.name.replace(/ +/g, "")}_${file.originalname}.${ext}`);
   },
 });
 
@@ -28,12 +29,13 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 10,
+    fileSize: 1024 * 1024 * 10, //10MB
   },
   fileFilter: fileFilter,
 });
 
-router.post("/",verifyAdmin, upload.single("productImage"), ProdController.createProduct);
+router.post("/",verifyAdmin, upload.array("productImage", 4), ProdController.createProduct);
+// router.post("/",verifyAdmin, upload.array("productImage", 4), ProdController.createProduct);
 
 router.get("/show", ProdController.getProducts);
 

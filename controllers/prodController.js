@@ -18,7 +18,7 @@ exports.createProduct = async (req, res, next) => {
       mrPrice: req.body.mrPrice,
       sPrice: req.body.sPrice,
       colors: req.body.colors,
-      productImage: req.file.filename,
+      productImage: req.body.name,
     };
     //const newProduct = await createProductObj(req);
     
@@ -55,8 +55,8 @@ exports.getProducts = (req, res, next) => {
   // .select("-_id -__v -updatedAt")
     .populate("category", "-_id name")
     .exec((err, products) => {
-      if (err) return res.status(400).send({ message: "showing order", err });
-      return res.status(200).send({ message: "showing all orders in the cart", products });
+      if (err) return res.status(400).send({ message: "error showing products", err });
+      return res.status(200).send({ message: "showing all products in the list", products });
     });
 };
 
