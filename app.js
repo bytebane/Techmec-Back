@@ -7,10 +7,12 @@ const productRoute = require("./routes/prodRoute");
 const cartRoute = require("./routes/cartRoute");
 const adminRoute = require("./routes/adminRoute");
 const userRoute = require("./routes/userRoute");
+const dealsRoute =require("./routes/excdealRoute");
+const newarvRoute =require("./routes/newarvRoute");
 
 // Use body parser middleware to parse body of incoming requests
 // app.use('./public/uploads',express.static('./public/uploads'));
-app.use(express.static(__dirname+'/public/uploads'));
+app.use(express.static(__dirname+'/public'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
@@ -21,6 +23,8 @@ app.use("/category", categoryRoute);
 app.use("/cart", cartRoute);
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
+app.use("/excdeals", dealsRoute);
+app.use("/newarrivals", newarvRoute);
 // Handle Error Requests
 
 app.get("/", (req, res) => {
