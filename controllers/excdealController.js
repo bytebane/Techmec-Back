@@ -33,7 +33,7 @@ exports.getExcdeal = async (req, res, next)=> {
     excdeal.find({}, {})
     // .select("-__v -updatedAt")
   // .select("-_id -__v -updatedAt")
-    .populate("product", "-_id name productImage description mrPrice sPrice quantity colors category")
+    .populate("product", "_id name productImage description mrPrice sPrice quantity colors category")
     .exec((err, excdeal) => {
       if (err) return res.status(400).send({ message: "error showing deals", err });
       return res.status(200).send({ message: "showing all deals in the list", excdeal: excdeal });

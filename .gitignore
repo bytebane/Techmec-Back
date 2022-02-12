@@ -1,9 +1,9 @@
 # CUSTOMS
 
-public/
-*.png
+# public/
+# *.png
 .timetracker
-*.crt
+# *.crt
 
 # Logs
 logs

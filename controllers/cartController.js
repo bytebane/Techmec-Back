@@ -7,19 +7,20 @@ if (process.env.NODE_ENV !== "production") {
 exports.createOrder = async (req, res, next) => {
   const newOrder = {
     product: req.body.productId,
-    quantity: parseInt(req.body.quantity),
+    quantity: req.body.quantity,
     user: req.body.userId,
   };
 
   try {
     const stock = await Product.findById(newOrder.product);
-    if (newOrder.quantity > stock.quantity) return res.status(200).send({ message: "Product is out of stock" });
+    console.log(stock)
+    if (req.body.quantity > stock.quantity) return res.status(200).send({ message: "Product is out of stock" });
     const product = await Cart.create(newOrder);
     const update = { quantity: stock.quantity - newOrder.quantity };
     await Product.findByIdAndUpdate(stock.id, update, { new: true });
-    return res.status(200).send({ message: "Order created successfully!", product });
+    return res.status(200).send({ message: "Order created successfully!", order: product });
   } catch (error) {
-    return res.status(400).send({ message: "unable to create order", error });
+    return res.status(400).send({ message: "unable to create order", error:  " "+error });
   }
 };
 
