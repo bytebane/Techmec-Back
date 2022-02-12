@@ -8,10 +8,6 @@
     "start": "node server.js",
     "nodemon": "nodemon server.js"
   },
-  "engines" : { 
-    "node" : "16.13.2",
-    "npm" : "8.1.2"
-  },
 
   "keywords": [],
   "author": "Reniyal",
