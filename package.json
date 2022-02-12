@@ -8,6 +8,10 @@
     "start": "node server.js",
     "nodemon": "nodemon server.js"
   },
+  "engines" : { 
+    "node" : "14.19.0" 
+  },
+
   "keywords": [],
   "author": "Reniyal",
   "license": "UNLICENSED",
