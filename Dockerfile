@@ -6,6 +6,9 @@ WORKDIR /app/src
 
 COPY package*.json .
 
+RUN npm install -g n
+RUN n 16.13.2
+RUN npm install -g npm@8.1.2
 RUN npm install
 
 COPY . .
