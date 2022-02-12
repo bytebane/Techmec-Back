@@ -1,5 +1,5 @@
 # FROM node:latest
-FROM node:16.14.0
+FROM node:14.19.0
 
 RUN mkdir -p /app/src
 
