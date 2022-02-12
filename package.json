@@ -11,8 +11,7 @@
 
   "keywords": [],
   "author": "Reniyal",
-  "license": "UNLICENSED",
-  "private": true,
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
