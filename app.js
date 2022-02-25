@@ -5,14 +5,17 @@ const cors = require("cors");
 const categoryRoute = require("./routes/cateRoute");
 const productRoute = require("./routes/prodRoute");
 const cartRoute = require("./routes/cartRoute");
+const orderRoute = require("./routes/orderRoute");
 const adminRoute = require("./routes/adminRoute");
 const userRoute = require("./routes/userRoute");
-const dealsRoute =require("./routes/excdealRoute");
-const newarvRoute =require("./routes/newarvRoute");
+const dealsRoute = require("./routes/excdealRoute");
+const newarvRoute = require("./routes/newarvRoute");
+const addressRoute = require("./routes/addressRoute");
+const razorPay = require("./routes/razorpay");
 
 // Use body parser middleware to parse body of incoming requests
 // app.use('./public/uploads',express.static('./public/uploads'));
-app.use(express.static(__dirname+'/public'));
+app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
@@ -20,15 +23,18 @@ app.use(cors());
 // Routes which should handle requests
 app.use("/product", productRoute);
 app.use("/category", categoryRoute);
-app.use("/cart", cartRoute);
+// app.use("/cart", cartRoute);
+app.use("/order", orderRoute);
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
 app.use("/excdeals", dealsRoute);
 app.use("/newarrivals", newarvRoute);
+app.use("/address", addressRoute);
+app.use("/razorpay", razorPay);
 // Handle Error Requests
 
 app.get("/", (req, res) => {
-  res.send('API IS NOW UP & RUNNING');
+  res.send("API IS NOW UP & RUNNING");
 });
 
 // Handle Error Requests
