@@ -23,22 +23,20 @@ const productSchema = mongoose.Schema(
       default: 1,
     },
     mrPrice: {
-      type: Number,
-      default: 1,
+      type: String,
+      default:'0.00'
     },
     sPrice: {
-      type: Number,
-      default: 2,
+      type: String,
+      default: '0.00'
     },
     colors:[{
       type: String,
-      default: "black"
+      default: ["black"]
     }],
-    productImage: {
-      type: String,
-    },
   },
   { timestamps: true } //to include createdAt and updatedAt
 );
+
 productSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model("Product", productSchema);

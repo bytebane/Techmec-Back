@@ -1,15 +1,18 @@
 const Product = require("../models/prodModel");
-const Cat = require("../models/cateModel")
+const Cat = require("../models/cateModel");
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
 exports.createProduct = async (req, res, next) => {
-  const productExist= await Product.findOne({name:req.body.name})
-  if (productExist) return res.status(400).send({ success: false, message: "Product already exists! Try Again" });
+  const productExist = await Product.findOne({ name: req.body.name });
+  if (productExist)
+    return res
+      .status(400)
+      .send({ success: false, message: "Product already exists! Try Again" });
 
   try {
-    const mycategory = await Cat.findOne({name: req.body.category})
+    const mycategory = await Cat.findOne({ name: req.body.category });
     const newProduct = {
       category: mycategory._id,
       name: req.body.name,
@@ -18,31 +21,35 @@ exports.createProduct = async (req, res, next) => {
       mrPrice: req.body.mrPrice,
       sPrice: req.body.sPrice,
       colors: req.body.colors,
-      productImage: req.body.name,
     };
     //const newProduct = await createProductObj(req);
-    
+
     const product = await Product.create(newProduct);
-    return res.status(200).send({ message: "Product created successfully!", product });
+    return res
+      .status(200)
+      .send({ message: "Product created successfully!", product });
   } catch (error) {
-    if (error.code === 11000) return res.status(200).send({ message: "product already exist" });
-    return res.status(400).send({ message: "unable to create product", error: " " + error });
+    if (error.code === 11000)
+      return res.status(200).send({ message: "product already exist" });
+    return res
+      .status(400)
+      .send({ message: "unable to create product", error: " " + error });
   }
 };
 
 exports.updateProduct = async (req, res, next) => {
   const filter = { _id: req.body.id };
   await Product.findByIdAndUpdate(filter, update);
-}
-
+};
 
 exports.getProducts = (req, res, next) => {
-
   const pageNo = parseInt(req.query.pageNo);
   const size = 3;
 
   if (pageNo <= 0) {
-    return res.status(200).send({ error: true, message: "invalid page number" });
+    return res
+      .status(200)
+      .send({ error: true, message: "invalid page number" });
   }
 
   const query = {
@@ -52,11 +59,14 @@ exports.getProducts = (req, res, next) => {
 
   Product.find({}, {}, query)
     .select("-__v -updatedAt")
-  // .select("-_id -__v -updatedAt")
+    // .select("-_id -__v -updatedAt")
     .populate("category", "-_id name")
     .exec((err, products) => {
-      if (err) return res.status(400).send({ message: "error showing products", err });
-      return res.status(200).send({ message: "showing all products in the list", products });
+      if (err)
+        return res.status(400).send({ message: "error showing products", err });
+      return res
+        .status(200)
+        .send({ message: "showing all products in the list", products });
     });
 };
 
@@ -65,11 +75,21 @@ exports.deleteProducts = async (req, res, next) => {
     const deletedProduct = await Product.findByIdAndDelete(req.params.prodId); // the `await` is very important here!
 
     if (!deletedProduct) {
-      return res.status(400).send({success: false, message: "Could not delete product" });
+      return res
+        .status(400)
+        .send({ success: false, message: "Could not delete product" });
     }
-    return res.status(200).send({success: true, message: "Product deleted successfully", product: deletedProduct });
+    return res
+      .status(200)
+      .send({
+        success: true,
+        message: "Product deleted successfully",
+        product: deletedProduct,
+      });
   } catch (error) {
-    return res.status(400).send({success: false, message: "Something went wrong!", error:error });
+    return res
+      .status(400)
+      .send({ success: false, message: "Something went wrong!", error: error });
   }
 };
 
