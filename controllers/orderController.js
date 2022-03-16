@@ -23,6 +23,11 @@ exports.createOrders = async (req, res, next) => {
     orderStatus: req.body.orderStatus,
     orderPayment: req.body.orderPayment,
     returnStatus: req.body.returnStatus,
+    razorPayPaymentId: req.body.razorPayPaymentId,
+    razorPayOrderID: req.body.razorPayOrderID,
+    deliveredOn: req.body.deliveredOn,
+    estDelDate: req.body.estDelDate,
+    orderAddress: req.body.orderAddress,
   };
 
   try {
@@ -43,18 +48,59 @@ exports.createOrders = async (req, res, next) => {
   }
 };
 
+exports.getOrder = async (req, res, next) => {
+  try {
+    const orderData = await Order.find({ user: req.params.userId });
+    if (!orderData) {
+      return res
+        .status(400)
+        .send({ success: false, message: "Admin Not Found" });
+    }
+    return res.status(200).send(orderData);
+  } catch (error) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Error", error: error });
+  }
+};
 exports.getOrders = async (req, res, next) => {
-  await Order.find({}, {}, query)
+  await Order.find({}, {}) //, query)
     .populate("products", "name sPrice")
     .exec((err, orders) => {
-      if (err) return res.status(400).send({ message: "showing order", err });
+      if (err) return res.status(400).send({ message: "Error", err });
       return res.status(200).send({ message: "showing order", orders });
     });
 };
 
+exports.updateOrders = async (req, res) => {
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      req.params.orderId,
+      { $set: req.body },
+      { new: true }
+    );
+    if (!updatedOrder) {
+      return res
+        .status(400)
+        .send({ success: false, message: "Could not update Order" });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "Successfully updated",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: "An error has occurred, unable to update Order",
+      error: error,
+    });
+  }
+};
+
 exports.deleteOrders = async (req, res, next) => {
   try {
-    const deletedOrder = await Product.findByIdAndDelete(req.params.orderId); // the `await` is very important here!
+    const deletedOrder = await Order.findByIdAndDelete(req.params.orderId); // the `await` is very important here!
 
     if (!deletedOrder) {
       return res
