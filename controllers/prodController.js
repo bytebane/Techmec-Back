@@ -37,9 +37,43 @@ exports.createProduct = async (req, res, next) => {
   }
 };
 
-exports.updateProduct = async (req, res, next) => {
-  const filter = { _id: req.body.id };
-  await Product.findByIdAndUpdate(filter, update);
+exports.updateProducts = async (req, res) => {
+  const filter = { _id: req.params.prodId };
+  // await Product.findByIdAndUpdate(filter, update);
+
+  try {
+    const mycategory = await Cat.findOne({ name: req.body.category });
+    const newProduct = {
+      category: mycategory._id,
+      name: req.body.name,
+      description: req.body.description,
+      quantity: req.body.quantity,
+      mrPrice: req.body.mrPrice,
+      sPrice: req.body.sPrice,
+      colors: req.body.colors,
+    };
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.prodId,
+      { $set: newProduct },
+      { new: true }
+    );
+    if (!updatedProduct) {
+      return res
+        .status(400)
+        .send({ success: false, message: "Could not update Product" });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "Successfully updated",
+      updatedProd: updatedProduct,
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: "An error has occurred, unable to update Product",
+      error: error,
+    });
+  }
 };
 
 exports.getProducts = (req, res, next) => {
@@ -79,13 +113,11 @@ exports.deleteProducts = async (req, res, next) => {
         .status(400)
         .send({ success: false, message: "Could not delete product" });
     }
-    return res
-      .status(200)
-      .send({
-        success: true,
-        message: "Product deleted successfully",
-        product: deletedProduct,
-      });
+    return res.status(200).send({
+      success: true,
+      message: "Product deleted successfully",
+      product: deletedProduct,
+    });
   } catch (error) {
     return res
       .status(400)

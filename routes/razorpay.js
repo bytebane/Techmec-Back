@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const Razorpay = require("razorpay");
 var instance = new Razorpay({
-  key_id: "rzp_test_tu7TRR4ScII9h3",
-  key_secret: "t38HQMXXRKDUWAxNNr6HHKQt",
+  key_id: process.env.RP_KeyId,
+  key_secret: process.env.RP_KeySecret,
 });
 
 router.post("/", (req, res) => {
@@ -12,7 +12,7 @@ router.post("/", (req, res) => {
     //   receipt: "order_rcptid_11",
   };
   instance.orders.create(options, function (err, order) {
-    console.log(order);
+    // console.log(order);
     if (err) return res.status(400).send({ message: "Error", error: err });
     return res
       .status(200)

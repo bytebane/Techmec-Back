@@ -4,8 +4,10 @@ const { verifyUser, verifyAdmin } = require("../middleware/verifyToken");
 
 router.post("/", verifyUser, orderController.createOrders);
 
+router.get("/:userId", verifyUser, orderController.getOrder);
 router.get("/", orderController.getOrders);
-router.delete("/:orderId", verifyAdmin, orderController.deleteOrders);
+router.patch("/:orderId", orderController.updateOrders);
+router.delete("/:orderId", verifyUser, orderController.deleteOrders);
 
 // router.get("/show/:userId", cartController.getAllOrders);
 // router.get("/cart", verifyUser, cartController.cart);

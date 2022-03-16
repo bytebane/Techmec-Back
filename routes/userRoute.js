@@ -41,7 +41,14 @@ router.get("profile/:userId", verifyUser, userController.profile); //view a/c da
 
 router.patch("/:userId", verifyUser, userController.updateUser); //update a/c data
 
-router.post("/setDP", verifyUser, upload.single("displayPicture")); //set/update DP
+router.post("/setDP", upload.single("displayPicture"), async (req, res) => {
+  if (req.file === undefined)
+    return res
+      .status(400)
+      .send({ success: true, message: "you must select a file." });
+
+  return res.status(200).send({ success: true, message: "Image Uploaded" });
+}); //set/update DP
 
 router.delete("/:userId", verifyUser, userController.deleteUser); //delete user a/c
 

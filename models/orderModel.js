@@ -39,19 +39,41 @@ const orderSchema = mongoose.Schema(
     ],
     orderPrice: {
       type: String,
-      min: 100,
+      // min: 100,
     },
     orderStatus: {
-      type: String,
-      default: "placed",
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 3,
     },
     orderPayment: {
       type: String,
       default: "unpaid",
     },
+    orderAddress: {
+      type: String,
+      // default: "NA",
+    },
     returnStatus: {
       type: String,
       default: "NA",
+    },
+    razorPayPaymentId: {
+      type: String,
+      default: "NA",
+    },
+    razorPayOrderID: {
+      type: String,
+      default: "NA",
+    },
+    deliveredOn: {
+      type: String,
+      default: "NA",
+    },
+    estDelDate: {
+      type: String,
+      // default: "NA",
     },
   },
   { timestamps: true }
