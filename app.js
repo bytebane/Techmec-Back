@@ -12,6 +12,7 @@ const dealsRoute = require("./routes/excdealRoute");
 const newarvRoute = require("./routes/newarvRoute");
 const addressRoute = require("./routes/addressRoute");
 const razorPay = require("./routes/razorpay");
+const notification = require("./routes/notificationRoute");
 
 // Use body parser middleware to parse body of incoming requests
 // app.use('./public/uploads',express.static('./public/uploads'));
@@ -30,6 +31,7 @@ app.use("/user", userRoute);
 app.use("/excdeals", dealsRoute);
 app.use("/newarrivals", newarvRoute);
 app.use("/address", addressRoute);
+app.use("/notification", notification);
 app.use("/razorpay", razorPay);
 // Handle Error Requests
 
