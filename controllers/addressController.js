@@ -95,3 +95,24 @@ exports.editAddress = async (req, res, next) => {
       .send({ success: false, message: error, error: error });
   }
 };
+
+exports.deleteAddress = async (req, res) => {
+  try {
+    const delAddr = await Address.findByIdAndDelete(req.params.addrId);
+
+    if (!delAddr) {
+      return res
+        .status(400)
+        .send({ success: false, message: "Could not Delete Address!" });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "Successfully Deleted!",
+      deletedAddress: delAddr,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .send({ success: false, message: error, error: error });
+  }
+};

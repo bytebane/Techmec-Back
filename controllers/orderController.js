@@ -1,8 +1,18 @@
 const Order = require("../models/orderModel");
 const Product = require("../models/prodModel");
+const nodemailer = require("nodemailer");
+const notiController = require("../controllers/notificationController");
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
+
+var transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAILID,
+    pass: process.env.EMAILPASS,
+  },
+});
 
 exports.createOrders = async (req, res, next) => {
   // var prodArr = req.body.products.map(function (item) {
@@ -12,6 +22,13 @@ exports.createOrders = async (req, res, next) => {
   // req.body.productId.forEach(function (item, index, array) {
   //   console.log(item, index);
   // });
+  console.log(req.body.email);
+  const mailOptions = {
+    from: process.env.EMAILID,
+    to: req.body.emailId,
+    subject: "TechMec Order Placed",
+    text: req.body.emailBody, //req.body.emailMsg;
+  };
   const newOrder = {
     user: req.body.user,
     products: req.body.products,
@@ -35,9 +52,18 @@ exports.createOrders = async (req, res, next) => {
     // console.log(stock);
     // if (req.body.quantity > stock.quantity)
     //   return res.status(200).send({ message: "Product is out of stock" });
-    const order = await Order.create(newOrder);
     // const update = { quantity: stock.quantity - newOrder.quantity };
     // await Product.findByIdAndUpdate(stock.id, update, { new: true });
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log("Email sent: " + info.response);
+    //   }
+    // });
+    const order = await Order.create(newOrder);
+    notiController.createNotifications(req);
+    transporter.sendMail(mailOptions);
     return res
       .status(200)
       .send({ message: "Order created successfully!", order: order });
@@ -73,6 +99,12 @@ exports.getOrders = async (req, res, next) => {
 };
 
 exports.updateOrders = async (req, res) => {
+  const mailOptions = {
+    from: process.env.EMAILID,
+    to: req.body.emailId,
+    subject: "TechMec Order Status",
+    text: req.body.emailBody, //req.body.emailMsg;
+  };
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
       req.params.orderId,
@@ -84,6 +116,7 @@ exports.updateOrders = async (req, res) => {
         .status(400)
         .send({ success: false, message: "Could not update Order" });
     }
+    transporter.sendMail(mailOptions);
     return res.status(200).send({
       success: true,
       message: "Successfully updated",
