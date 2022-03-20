@@ -1,7 +1,6 @@
 # CUSTOMS
 
-public/
-# *.png
+# public/
 .timetracker
 # *.crt
 
