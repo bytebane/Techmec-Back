@@ -9,7 +9,7 @@ router.post("/", (req, res) => {
   const options = {
     amount: req.body.amount, // amount in the smallest currency unit
     currency: "INR",
-    //   receipt: "order_rcptid_11",
+    //   receipt: "order_rcptid_11",//hugkugjhasjhkvjhkjh
   };
   instance.orders.create(options, function (err, order) {
     console.log(order);
