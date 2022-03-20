@@ -12,7 +12,7 @@ router.post("/", (req, res) => {
     //   receipt: "order_rcptid_11",
   };
   instance.orders.create(options, function (err, order) {
-    // console.log(order);
+    console.log(order);
     if (err) return res.status(400).send({ message: "Error", error: err });
     return res
       .status(200)
