@@ -15,7 +15,7 @@ const productSchema = mongoose.Schema(
     },
     description: {
       type: String,
-      lowercase: true,
+      // lowercase: true,
       trim: true,
     },
     quantity: {
@@ -24,16 +24,18 @@ const productSchema = mongoose.Schema(
     },
     mrPrice: {
       type: String,
-      default:'0.00'
+      default: "0.00",
     },
     sPrice: {
       type: String,
-      default: '0.00'
+      default: "0.00",
     },
-    colors:[{
-      type: String,
-      default: ["black"]
-    }],
+    colors: [
+      {
+        type: String,
+        default: ["black"],
+      },
+    ],
   },
   { timestamps: true } //to include createdAt and updatedAt
 );
