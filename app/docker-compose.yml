@@ -1,0 +1,58 @@
+version: '3.9'
+
+
+services:
+  #Mongodb Services
+  techmongo:
+    container_name: mongo_db
+    image: mongo:4.4
+    restart: always
+    ports:
+      - 2717:27017
+    volumes:
+      - techmongovol:/data/db
+
+
+  #NodeJs Service
+
+  technode:
+    build: ./api/
+    ports:
+      - 3000:3000
+    volumes:
+      - technodevol:/usr/app/src
+    environment:
+      DATABASE_URL: "mongodb://techmongo:27017"
+      PORT: 3000
+      #For User
+      JWT_KEY: Uw!@7oL#Rk9X!3
+      # For Admin
+      MASTER_KEY: p$$9Wu4!%h5ew8e
+
+      # Razor Pay
+      RP_KeyId: rzp_test_tu7TRR4ScII9h3
+      RP_KeySecret: t38HQMXXRKDUWAxNNr6HHKQt
+
+
+
+      EMAILID: senseio.dev@gmail.com
+      EMAILPASS: "@Q92*Q8@L&Bkum"
+
+    depends_on:
+      - techmongo
+
+  #Website Services
+  techmecweb:
+    build: ./web/
+    restart: always
+    ports:
+      - 8080:80
+    # volumes:
+    #   - techmongovol:/data/db
+
+    depends_on:
+      - technode
+
+volumes:
+  techmongovol: {}
+  technodevol: {}
