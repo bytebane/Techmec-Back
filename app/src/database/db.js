@@ -3,12 +3,16 @@ const mongoose = require("mongoose");
 const database = mongoose.connect(
   process.env.DATABASE_URL,
   {
-    dbName: 'techmec',
+    dbName: "techmec",
     tlsInsecure: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true,
+    reconnectTries: 3,
+    // reconnectTries: Number.MAX_VALUE,
+    reconnectInterval: 500,
+    connectTimeoutMS: 10000,
     // tls: true,
     // tlsCAFile: "./ca-certificate.crt"
   },

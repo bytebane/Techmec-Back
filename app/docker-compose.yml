@@ -1,58 +1,77 @@
 version: '3.9'
 
-
 services:
   #Mongodb Services
-  techmongo:
-    container_name: mongo_db
+  mongo_db:
+    container_name: techmec_db
     image: mongo:4.4
-    restart: always
+    restart: unless-stopped
+    # restart: always
     ports:
       - 2717:27017
     volumes:
       - techmongovol:/data/db
-
-
-  #NodeJs Service
-
-  technode:
-    build: ./api/
-    ports:
-      - 3000:3000
-    volumes:
-      - technodevol:/usr/app/src
+    env_file: .env
     environment:
-      DATABASE_URL: "mongodb://techmongo:27017"
-      PORT: 3000
-      #For User
-      JWT_KEY: Uw!@7oL#Rk9X!3
-      # For Admin
-      MASTER_KEY: p$$9Wu4!%h5ew8e
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+    networks:
+      - backendnet
 
-      # Razor Pay
-      RP_KeyId: rzp_test_tu7TRR4ScII9h3
-      RP_KeySecret: t38HQMXXRKDUWAxNNr6HHKQt
-
-
-
-      EMAILID: senseio.dev@gmail.com
-      EMAILPASS: "@Q92*Q8@L&Bkum"
-
+    #NodeJs Service
+  nodeapp:
+    container_name: "techmec_api"
+    build: ./src/
+    restart: unless-stopped
+    ports:
+      - 8888:8888
     depends_on:
-      - techmongo
+      - mongo_db
+    volumes:
+      - technodevol:/var/app/src
+    networks:
+      - backendnet
+      - frontendnet
+    env_file: .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      PORT: ${PORT}
+      JWT_KEY: ${JWT_KEY}
+      MASTER_KEY: ${MASTER_KEY}
+      RP_KeyId: ${RP_KeyId}
+      RP_KeySecret: ${RP_KeySecret}
+      EMAILID: ${EMAILID}
+      EMAILPASS: ${EMAILPASS}
+    # environment:
+    #   DATABASE_URL: "mongodb://mongo_db:27017"
+    #   PORT: 8888
+    #   JWT_KEY: Uw!@7oL#Rk9X!3
+    #   MASTER_KEY: p$$9Wu4!%h5ew8e
+    #   RP_KeyId: rzp_test_tu7TRR4ScII9h3
+    #   RP_KeySecret: t38HQMXXRKDUWAxNNr6HHKQt
+    #   EMAILID: senseio.dev@gmail.com
+    #   EMAILPASS: "@Q92*Q8@L&Bkum"
+    # command: ./docker-entrypoint.sh mongo_db:27017 -- node server.js
 
   #Website Services
-  techmecweb:
+  webapp:
+    container_name: "techmec_web"
     build: ./web/
-    restart: always
+    restart: unless-stopped
+    # restart: always
     ports:
-      - 8080:80
-    # volumes:
-    #   - techmongovol:/data/db
-
+      - 80:80
     depends_on:
-      - technode
+      - nodeapp
+    networks:
+      - frontendnet
 
 volumes:
   techmongovol: {}
   technodevol: {}
+
+networks:
+  backendnet:
+    driver: bridge
+  frontendnet:
+    driver: bridge
