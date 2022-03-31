@@ -1,7 +1,12 @@
 # CUSTOMS
-# .gitignore
 .timetracker
+.dockerignore
+Dockerfile
+Procfile
+wait-for.sh
+# .gitignore
 # *.crt
+
 
 # Logs
 logs
