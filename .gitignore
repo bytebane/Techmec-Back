@@ -1,7 +1,5 @@
 # CUSTOMS
 # .gitignore
-app/web/techmec/
-app/src/public/
 .timetracker
 # *.crt
 
